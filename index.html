@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ADMIN ULTRA</title>
+</head>
+<body>
+
+<h2>🔥 ADMIN PRO MAX ULTRA</h2>
+
+<select id="time">
+<option value="1">1 ngày</option>
+<option value="7">7 ngày</option>
+<option value="30">30 ngày</option>
+<option value="99999">vĩnh viễn</option>
+</select>
+
+<button onclick="createKey()">TẠO KEY</button>
+
+<div id="list"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+
+<script>
+
+const firebaseConfig = {
+databaseURL: "YOUR_DATABASE_URL"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+function createKey(){
+
+let key = "AG-" + Math.random().toString(36).substring(2,8).toUpperCase();
+
+let days = document.getElementById("time").value;
+
+let expire = (days=="99999")
+? "never"
+: Date.now() + days*24*60*60*1000;
+
+db.ref("keys/"+key).set({
+status:"active",
+expire:expire,
+device:null,
+created:Date.now()
+});
+
+document.getElementById("list").innerHTML +=
+"<p>🔑 "+key+"</p>";
+
+}
+
+</script>
+
+</body>
+</html>
